@@ -4,6 +4,7 @@ import com.careerlens.dto.UserRequestDTO;
 import com.careerlens.dto.UserResponseDTO;
 import com.careerlens.entity.User;
 import com.careerlens.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponseDTO createUser(@RequestBody UserRequestDTO request) {
+    public UserResponseDTO createUser(@Valid @RequestBody UserRequestDTO request) {
 
         User user = new User(
                 request.getName(),

@@ -20,8 +20,11 @@ public class UserService {
 
     public User createUser(User user) {
 
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already registered");
+        }
 
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
 
         return userRepository.save(user);
