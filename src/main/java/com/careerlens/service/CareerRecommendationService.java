@@ -65,12 +65,13 @@ public class CareerRecommendationService {
 
             // ---------------- INTEREST SCORE ----------------
 // ---------------- INTEREST SCORE ----------------
+// ---------------- INTEREST SCORE ----------------
             int interestScore = 0;
 
             for (String interest : career.getRelatedInterests()) {
-                if (userInterests.contains(interest.toLowerCase())) {
+                if (hasInterest(userInterests, interest)) {
                     interestScore += career.getInterestWeights()
-                            .getOrDefault(interest.toLowerCase(), 0);
+                            .getOrDefault(interest.toLowerCase().trim(), 0);
                 }
             }
 
@@ -245,6 +246,17 @@ public class CareerRecommendationService {
         for (String skill : skills) {
 
             if (skill.trim().equals(requiredSkill.toLowerCase().trim())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    private boolean hasInterest(String userInterests, String requiredInterest) {
+        String[] interests = userInterests.toLowerCase().split(",");
+
+        for (String interest : interests) {
+            if (interest.trim().equalsIgnoreCase(requiredInterest.trim())) {
                 return true;
             }
         }
