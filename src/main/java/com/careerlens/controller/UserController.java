@@ -1,4 +1,7 @@
 package com.careerlens.controller;
+import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.careerlens.dto.UserRequestDTO;
 import com.careerlens.dto.UserResponseDTO;
@@ -72,5 +75,24 @@ public class UserController {
         userService.deleteUser(id);
 
         return "User deleted successfully";
+    }
+    @GetMapping("/me")
+    public UserResponseDTO getCurrentUser(Authentication authentication) {
+
+        String email = authentication.getName();
+
+        User user = userService.getAllUsers()
+                .stream()
+                .filter(u -> u.getEmail().equalsIgnoreCase(email))
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "User not found"
+                ));
+
+        return new UserResponseDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
     }
 }

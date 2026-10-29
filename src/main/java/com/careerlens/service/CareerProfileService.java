@@ -66,6 +66,32 @@ public class CareerProfileService {
         return convertToResponse(profile);
     }
 
+    public CareerProfileResponseDTO updateProfile(
+            Long userId,
+            CareerProfileRequestDTO request) {
+
+        CareerProfile profile =
+                careerProfileRepository.findByUserId(userId)
+                        .orElseThrow(() ->
+                                new IllegalArgumentException(
+                                        "Career profile not found"
+                                )
+                        );
+
+        profile.setEducation(request.getEducation());
+        profile.setCgpa(request.getCgpa());
+        profile.setSkills(request.getSkills());
+        profile.setInterests(request.getInterests());
+        profile.setPreferredRole(request.getPreferredRole());
+        profile.setCareerGoal(request.getCareerGoal());
+
+        CareerProfile updatedProfile =
+                careerProfileRepository.save(profile);
+
+        return convertToResponse(updatedProfile);
+    }
+
+
     private CareerProfileResponseDTO convertToResponse(
             CareerProfile profile) {
 
